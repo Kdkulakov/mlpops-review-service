@@ -313,7 +313,6 @@ const ResultsDisplay = ({ results, answers, onReset }) => {
           </Card>
         ))}
       </div>
-      </div>
 
       {/* Problem Areas */}
       {problemAreas.length > 0 && (
