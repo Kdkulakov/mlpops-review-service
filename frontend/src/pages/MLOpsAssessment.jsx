@@ -117,6 +117,7 @@ const MLOpsAssessment = () => {
         {showResults && (
           <ResultsDisplay 
             results={calculateResults} 
+            answers={answers}
             onReset={handleReset}
           />
         )}
