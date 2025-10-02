@@ -284,11 +284,10 @@ const ResultsDisplay = ({ results, answers, onReset }) => {
         </CardContent>
       </Card>
 
-      {/* Summary Stats */}
       <div className="grid md:grid-cols-4 gap-4">
         {[
           { label: 'Общий балл', value: totalScore, max: 120, icon: Award },
-          { label: 'Процент готовности', value: `${totalPercentage.toFixed(1)}%`, icon: TrendingUp },
+          { label: 'Процент зрелости', value: `${totalPercentage.toFixed(1)}%`, icon: TrendingUp },
           { label: 'Уровень зрелости', value: maturityLevel.level, icon: BarChart2 },
           { label: 'Всего вопросов', value: '60', icon: BarChart2 }
         ].map((stat, index) => (
@@ -298,21 +297,22 @@ const ResultsDisplay = ({ results, answers, onReset }) => {
           }}>
             <CardContent className="pt-6">
               <div className="flex items-center gap-3">
-                <div className="p-2 rounded-lg" style={{
+                <div className="p-2 rounded-lg flex-shrink-0" style={{
                   background: 'linear-gradient(135deg, rgba(6, 182, 212, 0.2) 0%, rgba(16, 185, 129, 0.2) 100%)'
                 }}>
                   <stat.icon className="w-5 h-5 text-cyan-400" />
                 </div>
-                <div>
-                  <div className="text-2xl font-bold text-cyan-100">
+                <div className="min-w-0 flex-1">
+                  <div className="text-xl md:text-2xl font-bold text-cyan-100 truncate">
                     {stat.value}{stat.max && ` / ${stat.max}`}
                   </div>
-                  <div className="text-xs text-gray-400">{stat.label}</div>
+                  <div className="text-xs text-gray-400 truncate">{stat.label}</div>
                 </div>
               </div>
             </CardContent>
           </Card>
         ))}
+      </div>
       </div>
 
       {/* Problem Areas */}
