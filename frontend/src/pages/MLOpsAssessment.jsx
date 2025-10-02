@@ -14,10 +14,24 @@ const MLOpsAssessment = () => {
   const [activeBlock, setActiveBlock] = useState(0);
 
   const handleAnswer = (questionId, value) => {
-    setAnswers(prev => ({
-      ...prev,
+    const newAnswers = {
+      ...answers,
       [questionId]: parseInt(value)
-    }));
+    };
+    setAnswers(newAnswers);
+
+    // Check if current block is complete and auto-advance
+    setTimeout(() => {
+      const currentBlock = questionsData[activeBlock];
+      const currentBlockQuestions = currentBlock.questions.map(q => q.id);
+      const answeredInBlock = currentBlockQuestions.filter(qId => newAnswers[qId] !== undefined).length;
+      
+      if (answeredInBlock === currentBlockQuestions.length && activeBlock < questionsData.length - 1) {
+        // Auto-advance to next block with smooth scroll
+        setActiveBlock(activeBlock + 1);
+        window.scrollTo({ top: 400, behavior: 'smooth' });
+      }
+    }, 300);
   };
 
   const calculateResults = useMemo(() => {
