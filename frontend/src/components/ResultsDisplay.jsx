@@ -1,11 +1,65 @@
-import React from 'react';
+import React, { useState, useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from './ui/card';
 import { Button } from './ui/button';
-import { RotateCcw, Award, TrendingUp, BarChart2 } from 'lucide-react';
-import { maturityLevels } from '../data/questions';
+import { RotateCcw, Award, TrendingUp, BarChart2, AlertCircle, Copy, Check } from 'lucide-react';
+import { maturityLevels, questionsData } from '../data/questions';
+import { useToast } from '../hooks/use-toast';
 
-const ResultsDisplay = ({ results, onReset }) => {
+const ResultsDisplay = ({ results, answers, onReset }) => {
   const { totalScore, totalPercentage, maturityLevel, blockScores } = results;
+  const [copied, setCopied] = useState(false);
+  const { toast } = useToast();
+
+  // Get problem areas (questions with No or Partial answers)
+  const problemAreas = useMemo(() => {
+    const problems = [];
+    questionsData.forEach(block => {
+      block.questions.forEach(question => {
+        const answer = answers[question.id];
+        if (answer === 0 || answer === 1) {
+          problems.push({
+            blockName: block.block,
+            questionText: question.text,
+            status: answer === 0 ? 'Нет' : 'Частично',
+            answer
+          });
+        }
+      });
+    });
+    return problems;
+  }, [answers]);
+
+  const copyProblemsToClipboard = () => {
+    let text = '🎯 ЗОНЫ ДЛЯ УЛУЧШЕНИЯ MLOPS ПРАКТИК\n\n';
+    
+    const groupedByBlock = {};
+    problemAreas.forEach(problem => {
+      if (!groupedByBlock[problem.blockName]) {
+        groupedByBlock[problem.blockName] = [];
+      }
+      groupedByBlock[problem.blockName].push(problem);
+    });
+
+    Object.keys(groupedByBlock).forEach(blockName => {
+      text += `📌 ${blockName.toUpperCase()}\n`;
+      groupedByBlock[blockName].forEach((problem, index) => {
+        text += `${index + 1}. [${problem.status}] ${problem.questionText}\n`;
+      });
+      text += '\n';
+    });
+
+    text += `\nВсего задач для улучшения: ${problemAreas.length}\n`;
+    text += `Текущий уровень зрелости: ${maturityLevel.level} (${totalPercentage.toFixed(1)}%)`;
+
+    navigator.clipboard.writeText(text).then(() => {
+      setCopied(true);
+      toast({
+        title: "Скопировано!",
+        description: "Список проблемных зон скопирован в буфер обмена",
+      });
+      setTimeout(() => setCopied(false), 2000);
+    });
+  };
 
   const CircularProgress = ({ percentage, size = 200 }) => {
     const strokeWidth = 12;
