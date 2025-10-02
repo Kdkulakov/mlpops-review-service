@@ -196,19 +196,64 @@ const MLOpsAssessment = () => {
                             <RadioGroup
                               value={answers[question.id]?.toString() || ''}
                               onValueChange={(value) => handleAnswer(question.id, value)}
-                              className="flex gap-6 mt-3"
+                              className="flex gap-4 mt-3"
                             >
-                              <div className="flex items-center space-x-2">
-                                <RadioGroupItem value="2" id={`q${question.id}-yes`} className="border-cyan-500" />
-                                <Label htmlFor={`q${question.id}-yes`} className="text-gray-300 cursor-pointer">Да (2)</Label>
+                              <div 
+                                className="flex items-center space-x-2 px-4 py-2 rounded-lg transition-all cursor-pointer"
+                                style={{
+                                  background: answers[question.id] === 2 
+                                    ? 'linear-gradient(135deg, rgba(6, 182, 212, 0.25) 0%, rgba(16, 185, 129, 0.25) 100%)'
+                                    : 'transparent',
+                                  border: answers[question.id] === 2 
+                                    ? '2px solid #06b6d4'
+                                    : '1px solid rgba(71, 85, 105, 0.3)'
+                                }}
+                              >
+                                <RadioGroupItem value="2" id={`q${question.id}-yes`} style={{
+                                  borderColor: answers[question.id] === 2 ? '#06b6d4' : '#475569',
+                                  borderWidth: '2px'
+                                }} />
+                                <Label htmlFor={`q${question.id}-yes`} className="cursor-pointer font-medium" style={{
+                                  color: answers[question.id] === 2 ? '#06b6d4' : '#94a3b8'
+                                }}>Да (2)</Label>
                               </div>
-                              <div className="flex items-center space-x-2">
-                                <RadioGroupItem value="1" id={`q${question.id}-partial`} className="border-yellow-500" />
-                                <Label htmlFor={`q${question.id}-partial`} className="text-gray-300 cursor-pointer">Частично (1)</Label>
+                              <div 
+                                className="flex items-center space-x-2 px-4 py-2 rounded-lg transition-all cursor-pointer"
+                                style={{
+                                  background: answers[question.id] === 1 
+                                    ? 'rgba(251, 191, 36, 0.15)'
+                                    : 'transparent',
+                                  border: answers[question.id] === 1 
+                                    ? '2px solid #fbbf24'
+                                    : '1px solid rgba(71, 85, 105, 0.3)'
+                                }}
+                              >
+                                <RadioGroupItem value="1" id={`q${question.id}-partial`} style={{
+                                  borderColor: answers[question.id] === 1 ? '#fbbf24' : '#475569',
+                                  borderWidth: '2px'
+                                }} />
+                                <Label htmlFor={`q${question.id}-partial`} className="cursor-pointer font-medium" style={{
+                                  color: answers[question.id] === 1 ? '#fbbf24' : '#94a3b8'
+                                }}>Частично (1)</Label>
                               </div>
-                              <div className="flex items-center space-x-2">
-                                <RadioGroupItem value="0" id={`q${question.id}-no`} className="border-gray-500" />
-                                <Label htmlFor={`q${question.id}-no`} className="text-gray-300 cursor-pointer">Нет (0)</Label>
+                              <div 
+                                className="flex items-center space-x-2 px-4 py-2 rounded-lg transition-all cursor-pointer"
+                                style={{
+                                  background: answers[question.id] === 0 
+                                    ? 'rgba(148, 163, 184, 0.15)'
+                                    : 'transparent',
+                                  border: answers[question.id] === 0 
+                                    ? '2px solid #94a3b8'
+                                    : '1px solid rgba(71, 85, 105, 0.3)'
+                                }}
+                              >
+                                <RadioGroupItem value="0" id={`q${question.id}-no`} style={{
+                                  borderColor: answers[question.id] === 0 ? '#94a3b8' : '#475569',
+                                  borderWidth: '2px'
+                                }} />
+                                <Label htmlFor={`q${question.id}-no`} className="cursor-pointer font-medium" style={{
+                                  color: answers[question.id] === 0 ? '#94a3b8' : '#64748b'
+                                }}>Нет (0)</Label>
                               </div>
                             </RadioGroup>
                           </div>
