@@ -29,7 +29,7 @@ const ResultsDisplay = ({ results, answers, onReset }) => {
     return problems;
   }, [answers]);
 
-  const copyProblemsToClipboard = () => {
+  const copyProblemsToClipboard = async () => {
     let text = '🎯 ЗОНЫ ДЛЯ УЛУЧШЕНИЯ MLOPS ПРАКТИК\n\n';
     
     const groupedByBlock = {};
@@ -51,14 +51,40 @@ const ResultsDisplay = ({ results, answers, onReset }) => {
     text += `\nВсего задач для улучшения: ${problemAreas.length}\n`;
     text += `Текущий уровень зрелости: ${maturityLevel.level} (${totalPercentage.toFixed(1)}%)`;
 
-    navigator.clipboard.writeText(text).then(() => {
-      setCopied(true);
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        await navigator.clipboard.writeText(text);
+        setCopied(true);
+        toast({
+          title: "Скопировано!",
+          description: "Список проблемных зон скопирован в буфер обмена",
+        });
+        setTimeout(() => setCopied(false), 2000);
+      } else {
+        // Fallback for browsers without clipboard API
+        const textArea = document.createElement('textarea');
+        textArea.value = text;
+        textArea.style.position = 'fixed';
+        textArea.style.left = '-999999px';
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textArea);
+        setCopied(true);
+        toast({
+          title: "Скопировано!",
+          description: "Список проблемных зон скопирован в буфер обмена",
+        });
+        setTimeout(() => setCopied(false), 2000);
+      }
+    } catch (err) {
+      console.error('Failed to copy:', err);
       toast({
-        title: "Скопировано!",
-        description: "Список проблемных зон скопирован в буфер обмена",
+        title: "Ошибка",
+        description: "Не удалось скопировать в буфер обмена",
+        variant: "destructive"
       });
-      setTimeout(() => setCopied(false), 2000);
-    });
+    }
   };
 
   const CircularProgress = ({ percentage, size = 200 }) => {
