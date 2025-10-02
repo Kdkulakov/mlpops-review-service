@@ -289,6 +289,126 @@ const ResultsDisplay = ({ results, answers, onReset }) => {
         ))}
       </div>
 
+      {/* Problem Areas */}
+      {problemAreas.length > 0 && (
+        <Card className="border-orange-500/30" style={{
+          background: 'linear-gradient(135deg, rgba(251, 146, 60, 0.1) 0%, rgba(234, 88, 12, 0.1) 100%)',
+          backdropFilter: 'blur(10px)'
+        }}>
+          <CardHeader>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <AlertCircle className="w-6 h-6 text-orange-400" />
+                <div>
+                  <CardTitle className="text-orange-100">
+                    Зоны для улучшения
+                  </CardTitle>
+                  <CardDescription className="text-gray-400">
+                    {problemAreas.length} вопросов требуют внимания
+                  </CardDescription>
+                </div>
+              </div>
+              <Button
+                onClick={copyProblemsToClipboard}
+                variant="outline"
+                size="sm"
+                className="gap-2"
+                style={{
+                  borderColor: 'rgba(251, 146, 60, 0.3)',
+                  color: '#fb923c',
+                  background: 'rgba(30, 41, 59, 0.6)'
+                }}
+              >
+                {copied ? (
+                  <>
+                    <Check className="w-4 h-4" />
+                    Скопировано
+                  </>
+                ) : (
+                  <>
+                    <Copy className="w-4 h-4" />
+                    Копировать список
+                  </>
+                )}
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              {questionsData.map((block, blockIndex) => {
+                const blockProblems = problemAreas.filter(p => p.blockName === block.block);
+                if (blockProblems.length === 0) return null;
+
+                return (
+                  <div key={blockIndex} className="space-y-2">
+                    <div className="flex items-center gap-2 mb-3">
+                      <div className="h-1 w-1 rounded-full bg-orange-400"></div>
+                      <h4 className="font-semibold text-orange-200">{block.block}</h4>
+                      <span className="text-xs text-gray-400">({blockProblems.length})</span>
+                    </div>
+                    <div className="space-y-2 ml-3">
+                      {blockProblems.map((problem, idx) => (
+                        <div 
+                          key={idx}
+                          className="flex items-start gap-3 p-3 rounded-lg border"
+                          style={{
+                            background: 'rgba(30, 41, 59, 0.4)',
+                            borderColor: problem.answer === 0 
+                              ? 'rgba(239, 68, 68, 0.3)' 
+                              : 'rgba(251, 191, 36, 0.3)'
+                          }}
+                        >
+                          <div 
+                            className="mt-0.5 px-2 py-0.5 rounded text-xs font-semibold"
+                            style={{
+                              background: problem.answer === 0 
+                                ? 'rgba(239, 68, 68, 0.2)' 
+                                : 'rgba(251, 191, 36, 0.2)',
+                              color: problem.answer === 0 ? '#ef4444' : '#fbbf24'
+                            }}
+                          >
+                            {problem.status}
+                          </div>
+                          <p className="text-sm text-gray-300 flex-1">
+                            {problem.questionText}
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Summary Box */}
+            <div 
+              className="mt-6 p-4 rounded-lg border-2"
+              style={{
+                background: 'rgba(6, 182, 212, 0.1)',
+                borderColor: 'rgba(6, 182, 212, 0.3)'
+              }}
+            >
+              <div className="flex items-center gap-3">
+                <div className="p-2 rounded-lg" style={{
+                  background: 'linear-gradient(135deg, rgba(6, 182, 212, 0.2) 0%, rgba(16, 185, 129, 0.2) 100%)'
+                }}>
+                  <TrendingUp className="w-5 h-5 text-cyan-400" />
+                </div>
+                <div>
+                  <p className="text-sm text-cyan-100 font-semibold">
+                    Рекомендация
+                  </p>
+                  <p className="text-xs text-gray-400 mt-1">
+                    Сосредоточьтесь на вопросах со статусом "Нет" в первую очередь, 
+                    затем улучшайте области с частичной реализацией.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
       {/* Reset Button */}
       <div className="flex justify-center pt-4">
         <Button
