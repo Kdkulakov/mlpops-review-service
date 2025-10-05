@@ -3,6 +3,7 @@
 # IDE and editors
 .idea/
 .vscode/
+.claude/
 
 # Dependencies
 node_modules/
@@ -77,11 +78,31 @@ agenthub/agents/youtube/db
 .cache/
 
 # Mobile development
-android-sdk/ -e 
-# Environment files
+android-sdk/
+
+# Environment files (expanded)
 *.env
 *.env.*
--e 
-# Environment files
-*.env
-*.env.*
+.env.local
+.env.*.local
+
+# Python testing and caching
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+*.egg-info/
+*.egg
+
+# Docker
+.dockerignore
+docker-compose.override.yml
+
+# Jupyter
+*.ipynb_checkpoints
+
+# Databases
+*.sqlite
+*.sqlite3
+*.db
